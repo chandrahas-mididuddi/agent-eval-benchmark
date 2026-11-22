@@ -1,0 +1,137 @@
+# agent-eval-benchmark task suite
+# Categories: web-research, file-manipulation, math-data, multi-step
+- id: web-01
+  category: web-research
+  difficulty: easy
+  goal: "Search for 'capital of France' and report the capital city in your final answer."
+  tools: [search]
+  checker:
+    - type: final_answer_contains
+      value: "Paris"
+  expected_calls:
+    - tool: search
+      args: {query: "capital of France"}
+- id: web-02
+  category: web-research
+  difficulty: medium
+  goal: "Search for 'largest planet' and search for 'speed of light', then report both facts in your final answer."
+  tools: [search]
+  checker:
+    - type: final_answer_contains
+      value: "Jupiter"
+    - type: final_answer_contains
+      value: "299,792,458"
+- id: web-03
+  category: web-research
+  difficulty: medium
+  goal: "Search for 'population of Lagos' and report the population figure in your final answer."
+  tools: [search]
+  checker:
+    - type: final_answer_contains
+      value: "15.4 million"
+- id: file-01
+  category: file-manipulation
+  difficulty: easy
+  goal: "Read the file 'notes.txt' and report the launch date in your final answer."
+  tools: [read_file]
+  initial_files:
+    notes.txt: |
+      Project Alpha launch date: 2026-03-15.
+      Owner: Priya.
+      Budget: 50000.
+  checker:
+    - type: final_answer_contains
+      value: "2026-03-15"
+- id: file-02
+  category: file-manipulation
+  difficulty: easy
+  goal: "Create a file 'summary.txt' containing 'Weekly summary: 3 tasks completed, 0 blockers.'"
+  tools: [write_file]
+  checker:
+    - type: file_exists
+      path: "summary.txt"
+    - type: file_content_contains
+      path: "summary.txt"
+      value: "3 tasks completed"
+- id: file-03
+  category: file-manipulation
+  difficulty: medium
+  goal: "Read the file 'sales.csv', compute 120 + 80 + 50, and create a file 'total.txt' containing 'Total sales: 250'."
+  tools: [read_file, calculator, write_file]
+  initial_files:
+    sales.csv: |
+      item,amount
+      apples,120
+      oranges,80
+      bananas,50
+  checker:
+    - type: file_exists
+      path: "total.txt"
+    - type: file_content_contains
+      path: "total.txt"
+      value: "Total sales: 250"
+- id: math-01
+  category: math-data
+  difficulty: easy
+  goal: "Compute 128 * 46 + 320 and report the result in your final answer."
+  tools: [calculator]
+  checker:
+    - type: final_answer_contains
+      value: "6208"
+  expected_calls:
+    - tool: calculator
+      args: {expression: "128 * 46 + 320"}
+- id: math-02
+  category: math-data
+  difficulty: medium
+  goal: "Compute the average of 12, 18, 24 and 30 and report the result in your final answer."
+  tools: [calculator]
+  checker:
+    - type: final_answer_contains
+      value: "21"
+- id: math-03
+  category: math-data
+  difficulty: medium
+  goal: "Run the query 'SELECT SUM(amount) FROM orders WHERE status = shipped' and report the total in your final answer."
+  tools: [db_query]
+  checker:
+    - type: final_answer_contains
+      value: "950"
+- id: plan-01
+  category: multi-step
+  difficulty: medium
+  goal: "Search for 'founder of Microsoft', then create a file 'founders.txt' containing 'Microsoft was founded by Bill Gates and Paul Allen in 1975.'"
+  tools: [search, write_file]
+  checker:
+    - type: file_exists
+      path: "founders.txt"
+    - type: file_content_contains
+      path: "founders.txt"
+      value: "Bill Gates"
+- id: plan-02
+  category: multi-step
+  difficulty: hard
+  goal: "Read the file 'expenses.txt', compute 1200 + 450 + 180, and create a file 'budget.txt' containing 'Monthly total: 1830'."
+  tools: [read_file, calculator, write_file]
+  initial_files:
+    expenses.txt: |
+      rent,1200
+      food,450
+      transport,180
+  checker:
+    - type: file_exists
+      path: "budget.txt"
+    - type: file_content_contains
+      path: "budget.txt"
+      value: "Monthly total: 1830"
+- id: plan-03
+  category: multi-step
+  difficulty: hard
+  goal: "Search for 'capital of France', search for 'largest planet', compute 15 * 24 + 60, and create a file 'report.txt' containing 'Paris, Jupiter, 420'."
+  tools: [search, calculator, write_file]
+  checker:
+    - type: file_exists
+      path: "report.txt"
+    - type: file_content_contains
+      path: "report.txt"
+      value: "Paris, Jupiter, 420"
